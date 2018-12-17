@@ -26,7 +26,7 @@ open class CounterPlugin : Plugin<Project> {
                     val resetTask = task<CounterTask>(it.id + "Reset") {
                         variable = it
                         action = CounterAction.SET
-                        value = "0"
+                        value = variable.default.toString()
                     }
                 }
             }

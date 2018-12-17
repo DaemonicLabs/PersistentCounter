@@ -7,7 +7,7 @@ import org.gradle.api.tasks.options.Option
 
 open class CounterTask : DefaultTask() {
     init {
-        group = "buildnumbers"
+        group = "counter"
         description = "Track Variables"
     }
 
@@ -20,7 +20,7 @@ open class CounterTask : DefaultTask() {
         set
 
     @Input
-    var value: String? = null
+    var value: String = ""
         @Option(option = "setValue", description = "Sets the exact value")
         set
 
@@ -43,7 +43,9 @@ open class CounterTask : DefaultTask() {
                 variable.value = value
             }
             CounterAction.SET -> {
-                value?.run {
+                value.takeIf {
+                    it.isNotBlank()
+                }?.run {
                     toIntOrNull()
                 }?.let { value ->
                     variable.value = value
