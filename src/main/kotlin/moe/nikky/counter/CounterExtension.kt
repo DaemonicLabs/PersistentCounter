@@ -13,7 +13,7 @@ open class CounterExtension(
         .resolve("share")
         .resolve("persistentCounter")
 
-    fun variable(id: String, key: String, configure: Variable.()->Unit = {}) {
+    fun variable(id: String, key: String, configure: Variable.() -> Unit = {}) {
         val variable = Variable(
             project = project,
             id = id,
@@ -23,9 +23,10 @@ open class CounterExtension(
         variables += variable
     }
 
-    val map: Map<String, Int> = variables.associate {
-        it.key to it.value
-    }
+    val map: Map<String, Int>
+        get() = variables.associate {
+            it.id to it.value
+        }
 
     fun get(id: String): Int {
         return variables.find {

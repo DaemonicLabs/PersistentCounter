@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "moe.nikky"
-version = "0.0.3"
+version = "0.0.4"
 
 // If your plugin has any external java dependencies, Gradle will attempt to
 // download them from JCenter for anyone using the plugins DSL
@@ -92,7 +92,7 @@ pluginBundle {
 
 //    mavenCoordinates {
 //        groupId = project.group
-//        artifactId = "persistent-counter-plugin"
+//        artifactId = "persistentCounter"
 //        version = project.version
 //    }
 }
