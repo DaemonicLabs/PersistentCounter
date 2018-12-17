@@ -8,7 +8,7 @@ open class CounterPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
 
-            val extension = extensions.create("buildnumber", CounterExtension::class.java, project)
+            val extension = extensions.create("counter", CounterExtension::class.java, project)
 
             project.afterEvaluate {
                 extension.variables.forEach {

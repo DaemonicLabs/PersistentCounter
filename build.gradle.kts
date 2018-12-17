@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "moe.nikky"
-version = "0.0.1"
+version = "0.0.2"
 
 // If your plugin has any external java dependencies, Gradle will attempt to
 // download them from JCenter for anyone using the plugins DSL
