@@ -26,9 +26,9 @@ open class CounterTask : DefaultTask() {
 
     @TaskAction
     fun exec() {
-        println("action: $action")
-        println("value: $value")
-        println("variable: $variable")
+        logger.debug("action: $action")
+        logger.debug("value: $value")
+        logger.debug("variable: $variable")
 
         when (action) {
             CounterAction.INCREASE -> {

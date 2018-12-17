@@ -5,21 +5,21 @@ import org.gradle.kotlin.dsl.findByType
 import java.io.File
 
 data class Variable(
-    val project: Project,
-    val id: String,
-    val key: String
+    internal val project: Project,
+    internal val id: String,
+    internal val key: String
 ) {
-    var default = 0
+    var default = 1
 
-    val folder: File
+    private val folder: File
         get() {
             val extension: CounterExtension = project.extensions.findByType()!!
             return extension.shareHome.resolve(project.name).resolve(id)
         }
 
-    val file: File = folder.resolve("$key.txt")
+    private val file: File = folder.resolve("$key.txt")
 
-    var value: Int
+    internal var value: Int
         get() {
             val file = file
             file.parentFile.mkdirs()

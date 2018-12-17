@@ -3,21 +3,23 @@ package moe.nikky.counter
 import org.gradle.api.Project
 import java.io.File
 
-open class CounterExtension(val project: Project) {
+open class CounterExtension(
+    private val project: Project
+) {
     internal val variables = mutableListOf<Variable>()
 
     val shareHome: File = File(System.getProperty("user.home"))
         .resolve(".local")
         .resolve("share")
-        .resolve("buildnumbers")
+        .resolve("persistentCounter")
 
-    fun variable(id: String, key: String, configure: (Variable)->Unit = {}) {
+    fun variable(id: String, key: String, configure: Variable.()->Unit = {}) {
         val variable = Variable(
             project = project,
             id = id,
             key = key
         )
-        configure(variable)
+        variable.configure()
         variables += variable
     }
 
@@ -28,7 +30,7 @@ open class CounterExtension(val project: Project) {
     fun get(id: String): Int {
         return variables.find {
             it.id == id
-        }!!.value.toInt()
+        }!!.value
     }
 }
 
