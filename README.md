@@ -4,6 +4,16 @@
 
 https://plugins.gradle.org/plugin/moe.nikky.persistentCounter
 
+## Tasks
+
+for each variable it will register the tasks:
+
+- `${variable}`
+- `${variable}Increase`
+- `${variable}Decrease`
+- `${variable}Set` argument example: `--setValue=7`
+- `${variable}Reset`
+
 ## Usage Example:
 
 kotlin-dsl:

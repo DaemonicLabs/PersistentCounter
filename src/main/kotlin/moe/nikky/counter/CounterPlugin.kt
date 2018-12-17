@@ -23,6 +23,10 @@ open class CounterPlugin : Plugin<Project> {
                         variable = it
                         action = CounterAction.DECREASE
                     }
+                    val setTask = task<CounterTask>(it.id + "Set") {
+                        variable = it
+                        action = CounterAction.SET
+                    }
                     val resetTask = task<CounterTask>(it.id + "Reset") {
                         variable = it
                         action = CounterAction.SET
