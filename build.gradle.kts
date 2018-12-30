@@ -8,8 +8,10 @@ plugins {
     // or the groovy plugin if the plugin uses Groovy
 }
 
+val isSnapshot = !project.hasProperty("release")
+
 group = "moe.nikky"
-version = "0.0.6"
+version = "0.0.7" + if (isSnapshot) "-SNAPSHOT" else ""
 
 // If your plugin has any external java dependencies, Gradle will attempt to
 // download them from JCenter for anyone using the plugins DSL
@@ -35,8 +37,8 @@ gradlePlugin {
 
 pluginBundle {
     // These settings are set for the whole plugin bundle
-    website = "https://github.com/NikkyAI/PersistentCounter"
-    vcsUrl = "https://github.com/NikkyAI/PersistentCounter"
+    website = "https://github.com/DaemonicLabs/PersistentCounter"
+    vcsUrl = "https://github.com/DaemonicLabs/PersistentCounter"
 
     // tags and description can be set for the whole bundle here, but can also
     // be set / overridden in the config for specific plugins
@@ -64,7 +66,7 @@ pluginBundle {
             // id is captured from java-gradle-plugin configuration
             displayName = "Persistent Counter"
             description = "Keeps track of buildnumbers and the like persistently"
-            tags = listOf("buildnumber", "persistent", "data")
+            tags = listOf("buildnumber", "persistent", "counter")
         }
 
 //        // another plugin
