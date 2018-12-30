@@ -98,3 +98,40 @@ pluginBundle {
 //        version = project.version
 //    }
 }
+
+val sourcesJar = tasks.create<Jar>("sourcesJar") {
+    classifier = "sources"
+    from(sourceSets["main"].allSource)
+}
+
+val javadoc = tasks.getByName<Javadoc>("javadoc") {}
+val javadocJar = tasks.create<Jar>("javadocJar") {
+    classifier = "javadoc"
+    from(javadoc)
+}
+
+publishing {
+    publications {
+        create("default", MavenPublication::class.java) {
+            groupId = project.group.toString()
+            artifactId = project.name.toString()
+            version = project.version.toString()
+
+            artifact(sourcesJar)
+            artifact(javadocJar)
+
+//            shadowComponents(this, configurations.modCompile)
+        }
+    }
+    repositories {
+        maven(url = "http://mavenupload.modmuss50.me/") {
+            val mavenPass: String? = project.properties["mavenPass"] as String?
+            mavenPass?.let {
+                credentials {
+                    username = "buildslave"
+                    password = mavenPass
+                }
+            }
+        }
+    }
+}
