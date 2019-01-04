@@ -46,7 +46,7 @@ open class CounterTask : DefaultTask() {
                 value.takeIf {
                     it.isNotBlank()
                 }?.run {
-                    toIntOrNull()
+                    trim().toIntOrNull()
                 }?.let { value ->
                     variable.value = value
                 } ?: run {
