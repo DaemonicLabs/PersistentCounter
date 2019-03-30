@@ -34,10 +34,12 @@ val buildnumber: Int = versionFile.let { file: File ->
 
 tasks.register("increaseBuildnumber") {
     group = "counter"
-    versionFile.parentFile.mkdirs()
-    versionFile.createNewFile()
-    versionFile.writeText((buildnumber+1).toString())
-    project.logger.lifecycle("file: $versionFile")
+    doLast {
+        versionFile.parentFile.mkdirs()
+        versionFile.createNewFile()
+        versionFile.writeText((buildnumber+1).toString())
+        project.logger.lifecycle("file: $versionFile")
+    }
 }
 
 val isCI = System.getenv("BUILD_NUMBER") != null

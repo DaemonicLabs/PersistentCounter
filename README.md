@@ -1,8 +1,20 @@
 # PersistentCounter
 
+this plugin counts numbers up, those numbers are persisted between builds
+and saved using a combination of the project, value name and value key
+if any of those changes the number resets to the default (`1`)
+so by using your version as a key, you get a buildnumber that resets on a version bump
+
 ## Gradle Plugin
 
 https://plugins.gradle.org/plugin/moe.nikky.persistentCounter
+
+or from `http://maven.modmuss50.me/`
+```kotlin
+plugins {
+  id("mode.nikky.persistentCounter") version "0.0.9-SNAPSHOT"
+}
+```
 
 ## Tasks
 
@@ -18,30 +30,18 @@ for each variable it will register the tasks:
 
 kotlin-dsl:
 ```kotlin
-val major = Constants.major
-val minor = Constants.minor
-val patch = Constants.patch
+import moe.nikky.counter.counterVariable
 
-counter {
-    variable(id = "buildnumber", key = "$major.$minor.$patch")
-}
-
-val counter: CounterExtension = extensions.getByType()
-
-val buildnumber by counter.map
+val buildnumber = counterVariable(id = "buildnumber", key = "$major.$minor.$patch")
 
 version = "$major.$minor.$patch-$buildnumber"
 ```
 
 groovy (wip): 
 ```groovy
-counter {
-    variable(id = "buildnumber", key = "$major.$minor.$patch")
-}
+import moe.nikky.counter.counterVariable
 
-def counter = extensions.getByType<CounterExtension>()
-
-def buildnumber = counter.map.buildnumber
+val buildnumber = counterVariable(id = "buildnumber", key = "$major.$minor.$patch")
 
 version = "$major.$minor.$patch-$buildnumber"
 ```
@@ -64,6 +64,8 @@ counter {
 
 val counter: CounterExtension = extensions.getByType()
 
-val buildnumber by counter.map
-val otherCounter = counter.get("otherCounter")
+val buildnumber = counterVariable(id = "buildnumber", key = "$major.$minor.$patch")
+val otherCounter = counterVariable(id = "otherCounter", key = "$someProperty") {
+  default = 0
+}
 ```
