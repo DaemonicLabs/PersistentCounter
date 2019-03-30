@@ -12,7 +12,7 @@ https://plugins.gradle.org/plugin/moe.nikky.persistentCounter
 or from `http://maven.modmuss50.me/`
 ```kotlin
 plugins {
-  id("mode.nikky.persistentCounter") version "0.0.9-SNAPSHOT"
+  id("mode.nikky.persistentCounter") version "0.0.8-SNAPSHOT"
 }
 ```
 
