@@ -4,14 +4,46 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
-    // Apply other plugins here, e.g. the kotlin plugin for a plugin written in Kotlin
-    // or the groovy plugin if the plugin uses Groovy
 }
 
-val isSnapshot = !project.hasProperty("release")
+val ver = "0.0.8"
+
+val branch = System.getenv("GIT_BRANCH")
+    ?.takeUnless { it == "master" }
+    ?.let { "-$it" }
+    ?: ""
+
+val versionFile: File = File(System.getProperty("user.home"))
+    .resolve(".local")
+    .resolve("share")
+    .resolve("persistentCounter")
+    .resolve(project.name)
+    .resolve("buildnumber")
+    .resolve("$ver$branch.txt")
+
+val buildnumber: Int = versionFile.let { file: File ->
+    if (!file.exists()) {
+        1.apply {
+            file.parentFile.mkdirs()
+            file.writeText(toString())
+        }
+    } else {
+        file.readText().toInt()
+    }
+}
+
+tasks.register("increaseBuildnumber") {
+    group = "counter"
+    versionFile.parentFile.mkdirs()
+    versionFile.createNewFile()
+    versionFile.writeText((buildnumber+1).toString())
+    project.logger.lifecycle("file: $versionFile")
+}
+
+val isCI = System.getenv("BUILD_NUMBER") != null
 
 group = "moe.nikky"
-version = "0.0.7" + if (isSnapshot) "-SNAPSHOT" else ""
+version = "0.0.8" + if (isCI) "-$buildnumber" else "-dev"
 
 // If your plugin has any external java dependencies, Gradle will attempt to
 // download them from JCenter for anyone using the plugins DSL
@@ -25,11 +57,12 @@ dependencies {
     implementation(kotlin("stdlib"))
 }
 
+val pluginId ="moe.nikky.persistentCounter"
 // Use java-gradle-plugin to generate plugin descriptors and specify plugin ids
 gradlePlugin {
     plugins {
         create("persistentCounterPlugin") {
-            id = "moe.nikky.persistentCounter"
+            id = pluginId
             implementationClass = "moe.nikky.counter.CounterPlugin"
         }
     }
@@ -112,15 +145,26 @@ val javadocJar = tasks.create<Jar>("javadocJar") {
 
 publishing {
     publications {
-        create("default", MavenPublication::class.java) {
-            groupId = project.group.toString()
-            artifactId = project.name.toString()
-            version = project.version.toString()
-
+        val default = create("default", MavenPublication::class.java) {
             artifact(sourcesJar)
             artifact(javadocJar)
+        }
+        if(isCI) {
+            create("snapshot", MavenPublication::class.java) {
+                groupId = pluginId
+                artifactId = "$pluginId.gradle.plugin"
+                version = ver + "-SNAPSHOT"
 
-//            shadowComponents(this, configurations.modCompile)
+                pom.withXml {
+                    asNode().appendNode("dependencies").apply {
+                        appendNode("dependency").apply {
+                            appendNode("groupId", default.groupId)
+                            appendNode("artifactId", default.artifactId)
+                            appendNode("version", default.version)
+                        }
+                    }
+                }
+            }
         }
     }
     repositories {

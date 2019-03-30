@@ -13,8 +13,8 @@ data class Variable(
 
     private val folder: File
         get() {
-            val extension: CounterExtension = project.extensions.findByType()!!
-            return extension.shareHome.resolve(project.name).resolve(id)
+            return Counter.shareHome.resolve(project.name + project.path.replace(':', '/'))
+                .resolve(id)
         }
 
     private val file: File = folder.resolve("$key.txt")
