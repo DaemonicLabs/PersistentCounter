@@ -12,7 +12,7 @@ object Counter {
         .resolve("persistentCounter")
 }
 fun Project.counterVariable(id: String, key: String, configure: Variable.() -> Unit = {}): Int {
-    project.logger.lifecycle("registering variable '${id}-${key}' for project ${project.path}")
+    project.logger.info("registering variable '${id}-${key}' for project ${project.path}")
     val variable = Variable(
         project = this,
         id = id,

@@ -8,22 +8,23 @@ open class CounterPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.afterEvaluate {
             Counter.variables.forEach {
-                val sometask = task<CounterTask>(it.id) {
+                logger.info("processing variable: $it")
+                val sometask = it.project.task<CounterTask>(it.id) {
                     variable = it
                 }
-                val increaseTask = task<CounterTask>(it.id + "Increase") {
+                val increaseTask = it.project.task<CounterTask>(it.id + "Increase") {
                     variable = it
                     action = CounterAction.INCREASE
                 }
-                val decreaseTask = task<CounterTask>(it.id + "Decrease") {
+                val decreaseTask = it.project.task<CounterTask>(it.id + "Decrease") {
                     variable = it
                     action = CounterAction.DECREASE
                 }
-                val setTask = task<CounterTask>(it.id + "Set") {
+                val setTask = it.project.task<CounterTask>(it.id + "Set") {
                     variable = it
                     action = CounterAction.SET
                 }
-                val resetTask = task<CounterTask>(it.id + "Reset") {
+                val resetTask = it.project.task<CounterTask>(it.id + "Reset") {
                     variable = it
                     action = CounterAction.SET
                     value = variable.default.toString()
