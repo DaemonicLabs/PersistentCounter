@@ -32,7 +32,7 @@ val buildnumber: Int = versionFile.let { file: File ->
     }
 }
 
-tasks.register("increaseBuildnumber") {
+tasks.register("incrementBuildnumber") {
     group = "counter"
     doLast {
         versionFile.parentFile.mkdirs()

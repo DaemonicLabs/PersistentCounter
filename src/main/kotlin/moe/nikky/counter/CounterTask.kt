@@ -31,12 +31,12 @@ open class CounterTask : DefaultTask() {
         logger.debug("variable: $variable")
 
         when (action) {
-            CounterAction.INCREASE -> {
+            CounterAction.INCREMENT -> {
                 var value = variable.value
                 value += 1
                 variable.value = value
             }
-            CounterAction.DECREASE -> {
+            CounterAction.DECREMENT -> {
                 var value = variable.value
                 value -= 1
                 value = Math.max(0, value)

@@ -21,8 +21,8 @@ plugins {
 for each variable it will register the tasks:
 
 - `${variable}`
-- `${variable}Increase`
-- `${variable}Decrease`
+- `${variable}Increment`
+- `${variable}Decrement`
 - `${variable}Set` argument example: `--setValue=7`
 - `${variable}Reset`
 

@@ -34,7 +34,7 @@ pipeline {
             }
         }
 
-        stage("increaseBuildnumber") {
+        stage("incrementBuildnumber") {
             steps {
                 sh "./gradlew increaseBuildnumber"
             }

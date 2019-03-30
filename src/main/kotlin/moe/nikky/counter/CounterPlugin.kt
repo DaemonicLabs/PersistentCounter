@@ -20,22 +20,22 @@ open class CounterPlugin : Plugin<Project> {
                         }
                     }
 
-                    (it.id + "Increase").let { taskname ->
+                    (it.id + "Increment").let { taskname ->
                         if(tasks.names.contains(taskname)) {
                             val increaseTask = it.project.task<CounterTask>(taskname) {
                                 variable = it
-                                action = CounterAction.INCREASE
+                                action = CounterAction.INCREMENT
                             }
                         } else {
                             logger.debug("'$taskname' already exists")
                         }
                     }
 
-                    (it.id + "Decrease").let { taskname ->
+                    (it.id + "Decrement").let { taskname ->
                         if(tasks.names.contains(taskname)) {
                             val increaseTask = it.project.task<CounterTask>(taskname) {
                                 variable = it
-                                action = CounterAction.DECREASE
+                                action = CounterAction.DECREMENT
                             }
                         } else {
                             logger.debug("'$taskname' already exists")
