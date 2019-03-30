@@ -1,40 +1,43 @@
-node {
-    stage('Checkout') {
-        checkout scm
-    }
+pipeline {
+    agent any
 
-    stage('Build') {
-        sh "rm -rf build/libs/"
-        sh "chmod +x gradlew"
-        sh "./gradlew build --refresh-dependencies"
-    }
+    stages {
 
-    stage("publish") {
-        when {
-            branch 'master'
+        stage('Build') {
+            steps {
+                sh "rm -rf build/libs/"
+                sh "chmod +x gradlew"
+                sh "./gradlew build --refresh-dependencies"
+            }
         }
-        steps {
-            sh "./gradlew publish"
-        }
-    }
 
-    stage("gradle plugin") {
-        when {
-            branch 'master'
+        stage("publish") {
+            when {
+                branch 'master'
+            }
+            steps {
+                sh "./gradlew publish"
+            }
         }
-        steps {
-            withCredentials([file(credentialsId: 'gradlePluginProperties', variable: 'PROPERTIES')]) {
-                sh '''
+
+        stage("gradle plugin") {
+            when {
+                branch 'master'
+            }
+            steps {
+                withCredentials([file(credentialsId: 'gradlePluginProperties', variable: 'PROPERTIES')]) {
+                    sh '''
                     cat "$PROPERTIES" >> gradle.properties
                     ./gradlew publishPlugins
                     '''
+                }
             }
         }
-    }
 
-    stage("increaseBuildnumber") {
-        steps {
-            sh "./gradlew increaseBuildnumber"
+        stage("increaseBuildnumber") {
+            steps {
+                sh "./gradlew increaseBuildnumber"
+            }
         }
     }
 }
