@@ -2,66 +2,48 @@ package moe.nikky.counter
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.task
 
 open class CounterPlugin : Plugin<Project> {
     override fun apply(project: Project) {
+        val extension = project.extensions.create<CounterExtension>("counter", project)
         project.afterEvaluate {
-            Counter.variables.forEach {
-                with(it.project) {
-                    logger.info("processing variable: $it")
-                    (it.id).let { taskname ->
-                        if (tasks.names.contains(taskname)) {
-                            val sometask = it.project.task<CounterTask>(taskname) {
-                                variable = it
-                            }
-                        } else {
-                            logger.debug("'$taskname' already exists")
+            extension.variables.forEach { v ->
+                with(v.project) {
+                    logger.info("processing variable: $v")
+                    (v.id).let { taskname ->
+                        val sometask = v.project.task<CounterTask>(taskname) {
+                            variable = v
                         }
                     }
 
-                    (it.id + "Increment").let { taskname ->
-                        if(tasks.names.contains(taskname)) {
-                            val increaseTask = it.project.task<CounterTask>(taskname) {
-                                variable = it
-                                action = CounterAction.INCREMENT
-                            }
-                        } else {
-                            logger.debug("'$taskname' already exists")
+                    (v.id + "Increment").let { taskname ->
+                        val increaseTask = v.project.task<CounterTask>(taskname) {
+                            variable = v
+                            action = CounterAction.INCREMENT
                         }
                     }
 
-                    (it.id + "Decrement").let { taskname ->
-                        if(tasks.names.contains(taskname)) {
-                            val increaseTask = it.project.task<CounterTask>(taskname) {
-                                variable = it
-                                action = CounterAction.DECREMENT
-                            }
-                        } else {
-                            logger.debug("'$taskname' already exists")
+                    (v.id + "Decrement").let { taskname ->
+                        val increaseTask = v.project.task<CounterTask>(taskname) {
+                            variable = v
+                            action = CounterAction.DECREMENT
                         }
                     }
 
-                    (it.id + "Set").let { taskname ->
-                        if(tasks.names.contains(taskname)) {
-                            val increaseTask = it.project.task<CounterTask>(taskname) {
-                                variable = it
-                                action = CounterAction.SET
-                            }
-                        } else {
-                            logger.debug("'$taskname' already exists")
+                    (v.id + "Set").let { taskname ->
+                        val increaseTask = v.project.task<CounterTask>(taskname) {
+                            variable = v
+                            action = CounterAction.SET
                         }
                     }
 
-                    (it.id + "Reset").let { taskname ->
-                        if(tasks.names.contains(taskname)) {
-                            val increaseTask = it.project.task<CounterTask>(taskname) {
-                                variable = it
-                                action = CounterAction.SET
-                                value = variable.default.toString()
-                            }
-                        } else {
-                            logger.debug("'$taskname' already exists")
+                    (v.id + "Reset").let { taskname ->
+                        val increaseTask = v.project.task<CounterTask>(taskname) {
+                            variable = v
+                            action = CounterAction.SET
+                            value = variable.default.toString()
                         }
                     }
                 }

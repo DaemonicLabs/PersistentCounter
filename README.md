@@ -30,18 +30,20 @@ for each variable it will register the tasks:
 
 kotlin-dsl:
 ```kotlin
-import moe.nikky.counter.counterVariable
+import moe.nikky.counter.CounterExtension
 
-val buildnumber = counterVariable(id = "buildnumber", key = "$major.$minor.$patch")
+val counter: CounterExtension = project.extensions.getByType()
+val buildnumber = counter.variable(id = "buildnumber", key = "$major.$minor.$patch")
 
 version = "$major.$minor.$patch-$buildnumber"
 ```
 
 groovy (wip): 
 ```groovy
-import moe.nikky.counter.counterVariable
+import moe.nikky.counter.CounterExtension
 
-val buildnumber = counterVariable(id = "buildnumber", key = "$major.$minor.$patch")
+// not sure how to directly access extension types in groovy
+val buildnumber = counter.variable(id = "buildnumber", key = "$major.$minor.$patch")
 
 version = "$major.$minor.$patch-$buildnumber"
 ```
@@ -49,23 +51,17 @@ version = "$major.$minor.$patch-$buildnumber"
 ## Full Example
 
 ```kotlin
+import moe.nikky.counter.CounterExtension
+
 val major = Constants.major
 val minor = Constants.minor
 val patch = Constants.patch
 
-counter {
-    variable(id = "buildnumber", key = "$major.$minor.$patch") {
-      default = 1
-    }
-    variable(id = "otherCounter", key = "$someProperty") {
-      default = 0
-    }
-}
 
 val counter: CounterExtension = extensions.getByType()
 
-val buildnumber = counterVariable(id = "buildnumber", key = "$major.$minor.$patch")
-val otherCounter = counterVariable(id = "otherCounter", key = "$someProperty") {
+val buildnumber = counter.variable(id = "buildnumber", key = "$major.$minor.$patch")
+val otherCounter = counter.variable(id = "otherCounter", key = "$someProperty") {
   default = 0
 }
 ```

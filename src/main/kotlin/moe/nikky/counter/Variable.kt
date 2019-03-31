@@ -1,7 +1,7 @@
 package moe.nikky.counter
 
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.findByType
+import org.gradle.kotlin.dsl.getByType
 import java.io.File
 
 data class Variable(
@@ -13,7 +13,8 @@ data class Variable(
 
     private val folder: File
         get() {
-            return Counter.shareHome.resolve(project.name + project.path.replace(':', '/'))
+            val extension: CounterExtension = project.extensions.getByType()
+            return extension.shareHome.resolve(project.name + project.path.replace(':', '/'))
                 .resolve(id)
         }
 
